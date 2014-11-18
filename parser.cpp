@@ -331,6 +331,9 @@ static void parseBlock(
         
         #if defined FEDORACOIN
         #endif
+
+        #if defined PEERCOIN
+        #endif
         
         LOAD_VARINT(nbTX, p);
         for(uint64_t txIndex=0; likely(txIndex<nbTX); ++txIndex) {
@@ -420,6 +423,10 @@ static void mapBlockChainFiles() {
         
         #if defined FEDORACOIN
             "/.fedoracoin/"
+        #endif
+
+        #if defined PEERCOIN
+            "/.ppcoin/"
         #endif
 
     );
@@ -611,6 +618,10 @@ static bool buildBlock(
 
     #if defined BITCOIN
         0xd9b4bef9
+    #endif
+
+    #if defined PEERCOIN
+        0xe5e9e8e6
     #endif
     ;
 
