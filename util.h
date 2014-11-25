@@ -284,7 +284,7 @@
         #endif
 
         #if defined(PEERCOIN)
-            uint8_t type = 'P'
+            uint8_t type = 48 + 7
         #endif
     );
 
@@ -329,6 +329,8 @@
     uint64_t getBaseReward(
         uint64_t h
     );
+
+    const char *getInterestingAddr();
 
 #endif // __UTIL_H__
 
