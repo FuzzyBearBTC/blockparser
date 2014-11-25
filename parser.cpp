@@ -285,6 +285,10 @@ static void parseTX(
 
         SKIP(uint32_t, version, p);
 
+        #if defined PEERCOIN
+            SKIP(uint32_t, nTime, p);
+        #endif
+
         parseInputs<skip>(p, txHash);
 
         if(gNeedTXHash && !skip) {
@@ -339,6 +343,11 @@ static void parseBlock(
         for(uint64_t txIndex=0; likely(txIndex<nbTX); ++txIndex) {
             parseTX<false>(p);
         }
+
+        #if defined PEERCOIN
+            LOAD_VARINT(vchBlockSigSize, p);
+            p += vchBlockSigSize;
+        #endif
 
     endBlock(block);
 }
@@ -701,13 +710,14 @@ static void buildAllBlocks() {
                     auto bytesLeft = gChainSize - fullOffset;
                     auto secsLeft = bytesLeft / bytesPerSec;
                     printf(
-                        "%.2f%% (%.2f/%.2f Gigs) -- %6d blocks -- %.2f Megs/sec -- ETA %.0f secs            \r",
+                        "%.2f%% (%.2f/%.2f Gigs) -- %6d blocks -- %.2f Megs/sec -- ETA %.0f secs -- ELAPSED %.0f secs            \r",
                         (100.0*fullOffset)/gChainSize,
                         fullOffset/(1000.0*oneMeg),
                         gChainSize/(1000.0*oneMeg),
                         (int)nbBlocks,
                         bytesPerSec*1e-6,
-                        secsLeft
+                        secsLeft,
+                        elapsed*1e-6
                     );
                     lastReportOffset = fullOffset;
                     fflush(stdout);
